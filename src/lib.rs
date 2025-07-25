@@ -1,3 +1,5 @@
+//! shared VM implementation
+
 /// atom/primitive types
 pub enum Primitive {
     /// signed integer
@@ -14,12 +16,17 @@ pub enum Primitive {
 pub type Cmd = fn();
 
 pub fn nop() {}
-pub fn halt() { std::process::exit(0); }
+pub fn halt() {
+    std::process::exit(0);
+}
 
 /// low-level bytecode
 pub enum Bytecode {
     /// any Primitive can be used as is
     Primitive(Primitive),
+    /// any function can be used as VM command
+    Cmd(Cmd),
 }
 
+/// executable sequence
 pub type Seq = Vec<Bytecode>;

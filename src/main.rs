@@ -1,3 +1,11 @@
+//! executable file integrates VM components
+//! - parser
+//! - byte-code compiler (in-memory only)
+//! - byte-code interpreter
+
+mod config;
+use pyvm::*;
+
 use memmap2::Mmap;
 use std::fs::File;
 use std::io;
@@ -14,6 +22,7 @@ fn main() {
         // eprintln!("{:?}", &mmap[..] as &str);
         io::stdout().write_all(&mmap[..]).unwrap();
     }
+    halt();
 }
 
 fn arg(argc: usize, argv: &str) {

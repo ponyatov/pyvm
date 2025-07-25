@@ -1,0 +1,3 @@
+git make curl
+code meld doxygen clang-format
+dotnet-runtime-9.0 dotnet-sdk-9.0

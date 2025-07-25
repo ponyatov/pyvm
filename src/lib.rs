@@ -1,5 +1,7 @@
 //! shared VM implementation
 
+use crate::config::*;
+
 /// atom/primitive types
 pub enum Primitive {
     /// signed integer
@@ -10,6 +12,8 @@ pub enum Primitive {
     Bool(bool),
     /// text char
     Char(char),
+    /// unit element
+    Nil,
 }
 
 /// Virtual Machine command
@@ -30,3 +34,6 @@ pub enum Bytecode {
 
 /// executable sequence
 pub type Seq = Vec<Bytecode>;
+
+/// data stack
+pub static D: [Primitive; DSZ] = [Primitive::Nil; DSZ];

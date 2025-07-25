@@ -96,7 +96,7 @@ let FLIC = $"git remote add flic git@gitflic.ru:dponyatov/{app}.git"
 let CLONE = $"git clone -o gh git@github.com:ponyatov/{app}.git {HOME}/{APP}"
 let GITGUI = $"git gui &"
 let PULL = $"git pull -v gh {USER}"
-let COMMIT = $"git add -A ; git commit -am \".\" ; git push -v -u gh {USER}"
+let COMMIT = $"git add -A ; git commit -am \".\" ; git push -v -u gh {USER} ; pp"
 
 let bin:unit = //
     for d in ["bin"; "tmp"; "ref"] do

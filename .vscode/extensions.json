@@ -1,0 +1,19 @@
+{
+    "recommendations": [
+        "stkb.rewrap",
+        "ms-vscode.makefile-tools",
+        "IBM.output-colorizer",
+        // formatters
+        "xaver.clang-format",
+        "foxundermoon.shell-format",
+        "esbenp.prettier-vscode",
+        // misc
+        "usernamehw.errorlens",
+        // Rust
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "vadimcn.vscode-lldb",
+        // F#
+        "ionide.ionide-fsharp",
+    ]
+}

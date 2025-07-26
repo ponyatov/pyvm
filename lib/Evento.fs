@@ -5,6 +5,8 @@ let APP   = "pyvm"
 let TITLE = "Python VM in Rust"
 
 let ABOUT = "
+- single-thread VM for learning purposes
+- avoid parallelism and concurrency for leaving code simple
 "
 
 // mostly constant metainfo
@@ -32,6 +34,8 @@ let mkdir (path: string) : unit =
         File.WriteAllText(giti,"!.gitignore\n")
 
 let NewLines = List.reduce (fun a b -> $"{a}\n{b}")
+
+let spawn cmd = cmd;
 
 // env
 let USER = Environment.UserName

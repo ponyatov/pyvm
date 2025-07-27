@@ -2,6 +2,7 @@
 #![allow(unused_variables)]
 
 mod config;
+use config::*;
 
 use std::{
     io::{Read, Write},
@@ -32,8 +33,20 @@ const INDEX_BODY: &[u8] = include_bytes!("../static/index.html");
 const INDEX_FOOT: &[u8] = include_bytes!("../static/foot.html");
 const LOGO_PNG: &[u8] = include_bytes!("../doc/logo.png");
 const CSS_CSS: &[u8] = include_bytes!("../static/css.css");
-const JS_JS: &[u8] = include_bytes!("../static/js.js");
+
+// CDN
 const JQUERY_MIN_JS: &[u8] = include_bytes!("../static/cdn/jquery.min.js");
+
+// JavaScript components
+const JS_JS: &[u8] = include_bytes!("../static/js.js");
+const CONFIG_JS: &[u8] = const_format::formatcp!(
+    "// shared configuration
+// screen:
+export const width  = {SCREEN_WIDTH};
+export const height = {SCREEN_HEIGHT};
+"
+)
+.as_bytes();
 
 // WASM modules
 const HELLO_WASM: &[u8] = include_bytes!("../static/hello.wasm");
@@ -109,6 +122,7 @@ fn router(client: &mut TcpStream) {
         (b"GET", b"/favicon.ico") | (b"GET", b"/logo.png") => logo(client),
         (b"GET", b"/css.css") => css(client),
         (b"GET", b"/jquery.min.js") => js(client, HTTP_IMMUTABLE, JQUERY_MIN_JS),
+        (b"GET", b"/config.js") => js(client, HTTP_CACHE, CONFIG_JS),
         (b"GET", b"/js.js") => js(client, HTTP_CACHE, JS_JS),
         (b"GET", b"/hello.wasm") => wasm(client, HELLO_WASM),
         _ => error_404(client, &request),
@@ -116,8 +130,8 @@ fn router(client: &mut TcpStream) {
 }
 
 pub fn main() {
-    let listener = TcpListener::bind(config::BIND).unwrap();
-    eprintln!("server @ http://{}:{}", config::IP, config::PORT);
+    let listener = TcpListener::bind(config::SERVER_BIND).unwrap();
+    eprintln!("server @ http://{}:{}", SERVER_IP, SERVER_PORT);
     for client in listener.incoming() {
         match client {
             Ok(mut client) => {

@@ -3,6 +3,7 @@
 #![allow(dead_code)]
 
 mod config;
+use config::*;
 
 /// atom/primitive types
 #[derive(Copy, Clone)]
@@ -77,9 +78,9 @@ impl<T, const S: usize> Stack<T, S> {
 /// Virtual Machine execution context
 pub struct Context {
     /// data stack
-    data: Stack<Primitive, { config::DSZ }>,
+    data: Stack<Primitive, { VM_DSZ }>,
     /// return stack
-    ret: Stack<usize, { config::RSZ }>,
+    ret: Stack<usize, { VM_RSZ }>,
     /// active sequence
     seq: Seq,
     /// execution pointer

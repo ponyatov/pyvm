@@ -19,7 +19,7 @@ pub enum Primitive {
 
 impl Default for Primitive {
     fn default() -> Self {
-        Primitive { Nil }
+        Primitive::Nil
     }
 }
 
@@ -72,57 +72,14 @@ impl<T, const S: usize> Stack<T, S> {
     // pub fn empty(&self) -> bool { pointer>0; }
 }
 
-pub struct CodePoint<'a> {
-    seq: &'a Seq,
-    ip: usize,
-}
-
-impl CodePoint {
-    pub fn new(seq: &Seq) -> Self {
-        Self {
-            seq: &vec![],
-            ip: 0,
-        }
-    }
-}
-
-impl Default for CodePoint {
-    fn default() -> Self {
-        Self {
-            seq: Default::default(),
-            ip: Default::default(),
-        }
-    }
-}
-
-/// Virtual Machine Context:
-/// - stacks
-pub struct VM {
+/// Virtual Machine execution context
+pub struct Context {
     /// data stack
     data: Stack<Primitive, { config::DSZ }>,
     /// return stack
     ret: Stack<usize, { config::RSZ }>,
+    /// active sequence
+    seq: Seq,
     /// execution pointer
-    cp: CodePoint,
-}
-
-impl VM {
-    pub fn new() -> Self {
-        Self {
-            data: Stack::new(),
-            ret: Stack::new(),
-            cp: CodePoint::new(),
-        }
-    }
-
-    pub fn run(&mut self, seq: &Seq) {
-        let seq_len = cp.seq.len();
-        while cp.ip < seq_len {
-            match self.cp.seq[self.cp.ip] {
-                Bytecode::Primitive(p) => self.data.push(*p),
-                Bytecode::Cmd(c) => c(),
-            }
-            self.cp.ip += 1;
-        }
-    }
+    ip: usize,
 }

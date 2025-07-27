@@ -7,6 +7,14 @@ license     =  "MIT"
 repository  =  "https://github.com/ponyatov/pyvm"
 edition     =  "2024"
 
+[[bin]]
+name = "server"
+path = "src/server.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
 [dependencies]
 # const_format = "0.2"
 

@@ -3,6 +3,7 @@
 mod config;
 
 /// atom/primitive types
+#[derive(Copy, Clone)]
 pub enum Primitive {
     /// signed integer
     Int(i32),
@@ -14,6 +15,12 @@ pub enum Primitive {
     Char(char),
     /// unit element
     Nil,
+}
+
+impl Default for Primitive {
+    fn default() -> Self {
+        Primitive { Nil }
+    }
 }
 
 /// Virtual Machine command
@@ -54,11 +61,10 @@ impl<T, const S: usize> Stack<T, S> {
         }
     }
 
-    pub fn push(&mut self, item: T) -> &mut Self {
+    pub fn push(&mut self, item: T) {
         self.data[self.pointer] = item;
         assert!(self.pointer < S);
         self.pointer += 1;
-        self
     }
     // pub fn pop(&mut self, ) -> T { assert (pointer>0) ; stack[--pointer] }
     // pub fn depth(& self, ) -> usize { pointer }
@@ -69,6 +75,24 @@ impl<T, const S: usize> Stack<T, S> {
 pub struct CodePoint<'a> {
     seq: &'a Seq,
     ip: usize,
+}
+
+impl CodePoint {
+    pub fn new(seq: &Seq) -> Self {
+        Self {
+            seq: &vec![],
+            ip: 0,
+        }
+    }
+}
+
+impl Default for CodePoint {
+    fn default() -> Self {
+        Self {
+            seq: Default::default(),
+            ip: Default::default(),
+        }
+    }
 }
 
 /// Virtual Machine Context:
@@ -94,11 +118,11 @@ impl VM {
     pub fn run(&mut self, seq: &Seq) {
         let seq_len = cp.seq.len();
         while cp.ip < seq_len {
-            match cp.seq[cp.ip] {
-                Bytecode::Primitive(p) => self.data.push(p),
-                Bytecode::Cmd(c:) => c(),
+            match self.cp.seq[self.cp.ip] {
+                Bytecode::Primitive(p) => self.data.push(*p),
+                Bytecode::Cmd(c) => c(),
             }
-            cp.ip += 1;
+            self.cp.ip += 1;
         }
     }
 }

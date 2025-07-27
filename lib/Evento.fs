@@ -340,6 +340,7 @@ panic-semihosting = \"0.6\"
 
 let html:unit = //
     mkdir "static"
+    File.WriteAllText ("static/.gitignore","*.wasm\n!.gitignore\n")
     mkdir "static/cdn"
     File.WriteAllText ("static/cdn/.gitignore","*\n!.gitignore\n")
     touch "static/index.html"

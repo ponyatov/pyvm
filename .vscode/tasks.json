@@ -60,5 +60,14 @@
             "group"          : {"kind": "build", "isDefault": true },
             "presentation"   : {"showReuseMessage": true, "focus": true, "reveal": "silent", "close": false}
         },
+        {
+            "label"          : "wasm: hello",
+            "type"           : "shell",
+            "command"        : "make tmp/hello.wat",
+            "options"        : {"cwd": "${workspaceFolder}"},
+            "problemMatcher" : [],
+            "group"          : {"kind": "build", "isDefault": true },
+            "presentation"   : {"showReuseMessage": true, "focus": true, "reveal": "silent", "close": false}
+        },
     ]
 }

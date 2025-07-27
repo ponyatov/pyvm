@@ -9,11 +9,19 @@
         "esbenp.prettier-vscode",
         // misc
         "usernamehw.errorlens",
+        // Web/JS
+        "esbenp.prettier-vscode",
+        "mechatroner.rainbow-csv",
+        "jock.svg",
+        "dtsvet.vscode-wasm",
         // Rust
         "rust-lang.rust-analyzer",
         "tamasfe.even-better-toml",
         "vadimcn.vscode-lldb",
         // F#
         "ionide.ionide-fsharp",
+        // LLVM
+        "rreverser.llvm",
+        "revng.llvm-ir",
     ]
 }

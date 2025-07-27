@@ -1,0 +1,12 @@
+* {
+    background: #222;
+    color: lightgreen;
+    font-family: monospace;
+    font-size: 5mm;
+}
+
+#logo {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

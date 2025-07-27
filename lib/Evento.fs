@@ -344,6 +344,7 @@ let html:unit = //
     File.WriteAllText ("static/cdn/.gitignore","*\n!.gitignore\n")
     touch "static/index.html"
     touch "static/css.css"
+    touch "static/js.js"
     touch $"src/{app}.ts"
 
 let src:unit = //

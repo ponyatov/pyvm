@@ -1,5 +1,7 @@
 //! shared VM implementation
 
+#![allow(dead_code)]
+
 mod config;
 
 /// atom/primitive types

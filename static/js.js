@@ -12,11 +12,14 @@ const importObject = {
     js: { mem: memory },
 };
 
-WebAssembly.instantiateStreaming(fetch('/hello.wasm'), importObject);
-// .then(obj => {
+WebAssembly.instantiateStreaming(fetch('/hello.wasm'), importObject)
+    .then((obj) => {
+        console.log(obj);
+    })
+    .catch(console.error);
+
 //     obj.instance.exports.hello();
 // })
-// .catch(console.error);
 
 $(() => {
     console.log(memory);

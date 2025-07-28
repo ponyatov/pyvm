@@ -4,7 +4,6 @@
 //! - byte-code interpreter
 
 mod config;
-use pyvm::*;
 
 use memmap2::Mmap;
 use std::fs::File;
@@ -22,7 +21,6 @@ fn main() {
         // eprintln!("{:?}", &mmap[..] as &str);
         io::stdout().write_all(&mmap[..]).unwrap();
     }
-    halt();
 }
 
 fn arg(argc: usize, argv: &str) {

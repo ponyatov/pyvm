@@ -1,6 +1,7 @@
 //! shared VM implementation
 
 #![allow(dead_code)]
+#![allow(unused_imports)]
 
 mod config;
 use config::*;
@@ -16,7 +17,7 @@ pub enum Primitive {
     Bool(bool),
     /// text char
     Char(char),
-    /// unit element
+    /// empty element
     Nil,
 }
 
@@ -29,21 +30,24 @@ impl Default for Primitive {
 /// Virtual Machine command
 pub type Cmd = fn();
 
+/// `( -- )` do nothing
 pub fn nop() {}
+
+/// `( -- )` stop system
 pub fn halt() {
     std::process::exit(0);
 }
 
 /// low-level bytecode
-pub enum Bytecode {
-    /// any Primitive can be used as is
+pub enum ByteCode {
+    /// Primitive can be used as is
     Primitive(Primitive),
-    /// any function can be used as VM command
+    /// functions can be used as VM command
     Cmd(Cmd),
 }
 
 /// executable sequence
-pub type Seq = Vec<Bytecode>;
+pub type Seq = Vec<ByteCode>;
 
 /// generic stack
 /// `T` elements type
@@ -53,27 +57,27 @@ pub struct Stack<T, const S: usize> {
     pointer: usize,
 }
 
-impl<T, const S: usize> Stack<T, S> {
-    pub fn new() -> Self
-    where
-        T: Default + Copy,
-    {
-        Self {
-            data: [T::default(); S],
-            pointer: 0,
-        }
-    }
+// impl<T, const S: usize> Stack<T, S> {
+//     pub fn new() -> Self
+//     where
+//         T: Default + Copy,
+//     {
+//         Self {
+//             data: [T::default(); S],
+//             pointer: 0,
+//         }
+//     }
 
-    pub fn push(&mut self, item: T) {
-        self.data[self.pointer] = item;
-        assert!(self.pointer < S);
-        self.pointer += 1;
-    }
-    // pub fn pop(&mut self, ) -> T { assert (pointer>0) ; stack[--pointer] }
-    // pub fn depth(& self, ) -> usize { pointer }
-    // pub fn clear(&mut self, ) { pointer=0; }
-    // pub fn empty(&self) -> bool { pointer>0; }
-}
+//     pub fn push(&mut self, item: T) {
+//         self.data[self.pointer] = item;
+//         assert!(self.pointer < S);
+//         self.pointer += 1;
+//     }
+//     // pub fn pop(&mut self, ) -> T { assert (pointer>0) ; stack[--pointer] }
+//     // pub fn depth(& self, ) -> usize { pointer }
+//     // pub fn clear(&mut self, ) { pointer=0; }
+//     // pub fn empty(&self) -> bool { pointer>0; }
+// }
 
 /// Virtual Machine execution context
 pub struct Context {

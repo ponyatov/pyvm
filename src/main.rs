@@ -5,6 +5,7 @@
 
 mod config;
 mod gui;
+mod vm;
 
 use memmap2::Mmap;
 use std::fs::File;
@@ -22,8 +23,9 @@ fn main() {
         let src = unsafe { Mmap::map(&file).unwrap() };
         eprintln!("File size: {} bytes", src.len());
         // eprintln!("{:?}", &mmap[..] as &str);
-        io::stdout().write_all(&mmap[..]).unwrap();
+        io::stdout().write_all(&src[..]).unwrap();
     }
+    vm::VM::new().run();
     gui::GUI::new(&argv[0]).run();
 }
 

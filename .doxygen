@@ -4,7 +4,6 @@ PROJECT_LOGO           = doc/logo.png
 OUTPUT_DIRECTORY       = doc
 HTML_OUTPUT            = html
 INPUT                  = README.md doc lib inc src
-INPUT                 += hw cpu arch os
 INCLUDE_PATH           = inc
 EXCLUDE                = ref/* *.pdf *.djvu
 WARN_IF_UNDOCUMENTED   = NO

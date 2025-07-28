@@ -6,6 +6,13 @@
 mod config;
 use config::*;
 
+/// main memory size, bytes
+pub const Msz: usize = 0x10000;
+/// return stack size
+pub const Rsz: usize = 0x100;
+/// data stack size
+pub const Dsz: usize = 0x10;
+
 /// atom/primitive types
 #[derive(Copy, Clone)]
 pub enum Primitive {
@@ -13,10 +20,10 @@ pub enum Primitive {
     Int(i32),
     /// floating point
     Float(f32),
-    /// boolean
-    Bool(bool),
     /// text char
     Char(char),
+    /// boolean
+    Bool(bool),
     /// empty element
     Nil,
 }
@@ -31,10 +38,13 @@ impl Default for Primitive {
 pub type Cmd = fn();
 
 /// `( -- )` do nothing
-pub fn nop() {}
+fn nop() {
+    trace("nop");
+}
 
 /// `( -- )` stop system
-pub fn halt() {
+fn halt() {
+    trace("halt");
     std::process::exit(0);
 }
 
@@ -49,7 +59,7 @@ pub enum ByteCode {
 /// executable sequence
 pub type Seq = Vec<ByteCode>;
 
-/// generic stack
+/// generic fixed size stack
 /// `T` elements type
 /// `S:usize` fixed size
 pub struct Stack<T, const S: usize> {

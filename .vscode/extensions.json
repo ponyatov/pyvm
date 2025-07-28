@@ -14,6 +14,12 @@
         "mechatroner.rainbow-csv",
         "jock.svg",
         "dtsvet.vscode-wasm",
+        // C++
+        "ms-vscode.cpptools",
+        "jeff-hykin.better-cpp-syntax",
+        // Python
+        "ms-python.python",
+        "ms-python.autopep8",
         // Rust
         "rust-lang.rust-analyzer",
         "tamasfe.even-better-toml",

@@ -5,6 +5,7 @@ let APP   = "pyvm"
 let TITLE = "Python VM in Rust"
 
 let ABOUT = "
+- object virtual machine
 - single-thread VM for learning purposes
 - avoid parallelism and concurrency for leaving code simple
 "
@@ -35,7 +36,8 @@ let mkdir (path: string) : unit =
 
 let NewLines = List.reduce (fun a b -> $"{a}\n{b}")
 
-let spawn cmd = cmd;
+let meld path = $"meld {path} ~/em/{path} &"
+let spawn cmd = cmd
 
 // env
 let USER = Environment.UserName
@@ -120,14 +122,14 @@ PROJECT_LOGO           = doc/logo.png
 ")
     let LOGO = "cp ~/icons/control64.png doc/logo.png"
     let DOXY = "doxygen -l ; mv DoxygenLayout.xml doc/"
-    let DOTX = "meld .doxygen ~/em/.doxygen"
+    meld ".doxygen"
 
 let lib:unit = //
     mkdir "lib"
     File.WriteAllText($"lib/{app}.ini", "// line comment\n")
 
 let cpp: unit = //
-    mkdir "inc"
+    mkdir "inc" ; touch $"inc/{app}.hpp"
     File.WriteAllText ($"inc/{app}.hpp","""#pragma once
 
 #include <stdlib.h>
@@ -145,7 +147,7 @@ extern FILE *yyin;
 extern int yyparse();
 extern void yyerror(char *msg);
 """)
-    mkdir "src"
+    mkdir "src" ; touch $"src/{app}.cpp"
     let include = $"#include \"{app}.hpp\""
     File.WriteAllText ($"src/{app}.cpp",include + """
 
@@ -302,12 +304,34 @@ let firmware: uint = //
 let vm: uint = //
     workspace "vm"
 
+let rsmain: unit = //
+    mkdir "src"
+    File.WriteAllText ( "src/main.rs","""#![allow(unused_variables)]
+#![allow(non_upper_case_globals)]
+#![allow(dead_code)]
+
+mod rsvm;
+use crate::rsvm::*;
+
+fn main() {
+    let argv: Vec<String> = std::env::args().collect();
+    let argc = argv.len();
+    arg(0, &argv[0]);
+    for (i, argv) in argv.iter().skip(1).enumerate() {
+        arg(i + 1, argv);
+    }
+}
+
+fn arg(argc: usize, argv: &str) {
+    eprintln!("argv[{argc}] = {argv:?}");
+}
+""")
+
 let rust: unit = //
     cargo_config
     mkdir "src"
     touch "src/lib.rs"
-    File.WriteAllText ( "src/main.rs",
-        "fn main() { println!(\"Hello, world!\"); }\n")
+    rsmain
     File.WriteAllText ( "Cargo.toml", $"\
 [package]
 name        =  \"{app}\"
@@ -333,6 +357,7 @@ cortex-m = \"0.7\"
 cortex-m-rt = \"0.7\"
 panic-semihosting = \"0.6\"
 ")
+    meld "Cargo.toml"
     config
     server
     firmware
@@ -452,6 +477,7 @@ let vscode:unit = //
     for j in jsons do
         File.WriteAllText($".vscode/{j}.json","{\n}\n")
     settings ; tasks
+    meld ".vscode"
 
 let settings:unit = //
     File.WriteAllText ( ".vscode/settings.json","""{
@@ -528,7 +554,7 @@ let tasks:unit = //
 }
 """)
 
-let MELD = "meld .vscode ~/em/.vscode"
+meld ".vscode"
 
 let dirs:unit = //
     bin
@@ -545,7 +571,7 @@ let mk: unit = //
         touch $"mk/{m}.mk"
     File.WriteAllText("Makefile",
         makes |> List.map (fun m -> $"include mk/{m}.mk") |> NewLines)
-    let MK = $"meld mk ~/em/mk"
+    meld "mk"
 
 let cmake: unit = //
     touch "CMakeLists.txt"

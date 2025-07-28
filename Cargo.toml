@@ -15,9 +15,26 @@ path = "src/server.rs"
 name = "main"
 path = "src/main.rs"
 
+[lib]
+name        =  "vmlib"
+path        =  "src/lib.rs"
+crate-type  = ["cdylib"]
+
 [dependencies]
 const_format = "0.2"
+nom          = "8.0"
 
 [target.'cfg(all(target_os = "linux"))'.dependencies]
-libc = "0.2"
+libc    = "0.2"
 memmap2 = "0.9"
+
+[features]
+
+# hw
+pc              = ["i5"]
+# cpu
+i5              = ["x86_64"]
+# arch
+x86_64          = ["linux"]
+# os
+linux           = []

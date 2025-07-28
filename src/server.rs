@@ -2,7 +2,7 @@
 #![allow(unused_variables)]
 
 mod config;
-use config::*;
+// use config::*;
 
 use std::{
     io::{Read, Write},
@@ -42,9 +42,13 @@ const JS_JS: &[u8] = include_bytes!("../static/js.js");
 const CONFIG_JS: &[u8] = const_format::formatcp!(
     "// shared configuration
 // screen:
-export const width  = {SCREEN_WIDTH};
-export const height = {SCREEN_HEIGHT};
-"
+export const width     = {width};
+export const height    = {height};
+export const icon_size = {icon_size};
+",
+    width = config::gui::width,
+    height = config::gui::height,
+    icon_size = config::gui::icon_size
 )
 .as_bytes();
 
@@ -73,22 +77,21 @@ fn html(client: &mut TcpStream, body: &[u8]) {
     client.flush().unwrap();
 }
 
-fn logo(client: &mut TcpStream) {
+fn send(client: &mut TcpStream, ctype: &[u8], cache: &[u8], content: &[u8]) {
     client.write(&HTTP_200_OK).unwrap();
-    client.write(&IMAGE_PNG).unwrap();
-    client.write(&HTTP_IMMUTABLE).unwrap();
+    client.write(ctype).unwrap();
+    client.write(cache).unwrap();
     client.write(b"\r\n").unwrap();
-    client.write(&LOGO_PNG).unwrap();
+    client.write(content).unwrap();
     client.flush().unwrap();
 }
 
+fn logo(client: &mut TcpStream) {
+    send(client, IMAGE_PNG, HTTP_IMMUTABLE, LOGO_PNG);
+}
+
 fn css(client: &mut TcpStream) {
-    client.write(&HTTP_200_OK).unwrap();
-    client.write(&TEXT_CSS).unwrap();
-    client.write(&HTTP_CACHE).unwrap();
-    client.write(b"\r\n").unwrap();
-    client.write(&CSS_CSS).unwrap();
-    client.flush().unwrap();
+    send(client, TEXT_CSS, HTTP_CACHE, CSS_CSS);
 }
 
 fn js(client: &mut TcpStream, cache: &[u8], body: &[u8]) {
@@ -130,8 +133,12 @@ fn router(client: &mut TcpStream) {
 }
 
 pub fn main() {
-    let listener = TcpListener::bind(config::SERVER_BIND).unwrap();
-    eprintln!("server @ http://{}:{}", SERVER_IP, SERVER_PORT);
+    let listener = TcpListener::bind(config::server::bind).unwrap();
+    eprintln!(
+        "server @ http://{ip}:{port}",
+        ip = config::server::ip,
+        port = config::server::port
+    );
     for client in listener.incoming() {
         match client {
             Ok(mut client) => {

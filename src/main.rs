@@ -4,6 +4,7 @@
 //! - byte-code interpreter
 
 mod config;
+mod gui;
 
 use memmap2::Mmap;
 use std::fs::File;
